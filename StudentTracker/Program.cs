@@ -1,4 +1,11 @@
+using Microsoft.EntityFrameworkCore;
+using StudentTracker.DAL.Data;
+
 var builder = WebApplication.CreateBuilder(args);
+
+// AppDbContext configuration
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Add services to the container.
 

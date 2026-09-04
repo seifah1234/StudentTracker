@@ -4,10 +4,11 @@ using System.Text;
 
 namespace StudentTracker.Shared.Enums
 {
-    public enum AttendanceStatus
+    public enum Semester
     {
-        Present,
-        Absent,
-        Late
+        FirstSemester = 1,
+        SecondSemester = 2,
+
+        SummerSemester = 3
     }
 }
