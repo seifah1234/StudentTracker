@@ -7,41 +7,51 @@ using Microsoft.EntityFrameworkCore;
 using StudentTracker.DAL.Entities;
 using StudentTracker.DAL.Repositories.Interfaces;
 using StudentTracker.DAL.Data;
+using StudentTracker.DAL.UnitOfWork;
 
 namespace StudentTracker.DAL.Repositories.Implementations
 {
-    internal class StudentRepository : IStudentRepository
+    public class StudentRepository : IStudentRepository
     {
          private readonly AppDbContext _context;
-         public StudentRepository(AppDbContext context)
+        private readonly IUnitOfWork unitOfWork;
+         public StudentRepository(AppDbContext context, IUnitOfWork unitOfWork)
         {
             _context = context;
+            this.unitOfWork = unitOfWork;
         }
-        public async Task CreateStudent(Student student)
+        public async Task CreateStudent(Student student, CancellationToken cancellationToken = default)
         {
            await _context.Students.AddAsync(student);
-           await _context.SaveChangesAsync();
+           await unitOfWork.SaveChangesAsync(cancellationToken);
         }
 
-        public async Task<bool> StudentExists(int id)
+        public async Task<bool> StudentExists(int id, CancellationToken cancellationToken = default)
         {
-            return await _context.Students.AnyAsync<Student>(s => s.Id == id);
+            return await _context.Students.AnyAsync<Student>(s => s.Id == id, cancellationToken);
         }
 
-        public async Task<IEnumerable<Student>> GetAllStudents()
+        public async Task<IEnumerable<Student>> GetAllStudents(CancellationToken cancellationToken = default)
         {
-            return await _context.Students.ToListAsync();
+            return await _context.Students.ToListAsync(cancellationToken);
         }
 
-        public async Task<Student?> GetStudent(int id)
+        public async Task<Student?> GetStudent(int id, CancellationToken cancellationToken = default)
         {
-            return await _context.Students.FindAsync(id);
+            return await _context.Students.FindAsync(id, cancellationToken);
         }
 
-        public async Task UpdateStudent(Student student)
+        public async Task UpdateStudent(Student student, CancellationToken cancellationToken = default)
         {
             _context.Students.Update(student);
-            await _context.SaveChangesAsync();
+            await unitOfWork.SaveChangesAsync(cancellationToken);
+        }
+
+        public async Task<IEnumerable<Student>> GetStudentsByClassRoomId(int classRoomId, CancellationToken cancellationToken = default)
+        {
+            return await _context.Students
+                         .Where(s => s.ClassRoomId == classRoomId)
+                         .ToListAsync(cancellationToken);
         }
     }
 

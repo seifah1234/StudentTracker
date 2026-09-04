@@ -7,58 +7,77 @@ using Microsoft.EntityFrameworkCore;
 using StudentTracker.DAL.Entities;
 using StudentTracker.DAL.Repositories.Interfaces;
 using StudentTracker.DAL.Data;
+using StudentTracker.DAL.UnitOfWork;
+using StudentTracker.Shared.Enums;
 
 namespace StudentTracker.DAL.Repositories.Implementations
 {
-    internal class ClassRoomRepository : IClassRoomRepository
+    public class ClassRoomRepository : IClassRoomRepository
     {
          private readonly AppDbContext _context;
-         public ClassRoomRepository(AppDbContext context)
+        private readonly IUnitOfWork unitOfWork;
+         public ClassRoomRepository(AppDbContext context, IUnitOfWork unitOfWork)
         {
             _context = context;
+            this.unitOfWork = unitOfWork;   
         }
-        public async Task<IEnumerable<ClassRoom>> GetAllClassRooms()
+        public async Task<IEnumerable<ClassRoom>> GetAllClassRooms(
+            Semester? semester = null,
+            string? academicYear = null,
+            CancellationToken cancellationToken = default)
         {
-            return await _context.ClassRooms.ToListAsync();
+            var classRooms = _context.ClassRooms.AsQueryable();
+
+            if (semester.HasValue)
+            {
+                classRooms = classRooms.Where(cr => cr.Semester == semester.Value);
+            }
+
+            if (!string.IsNullOrEmpty(academicYear))
+            {
+                classRooms = classRooms.Where(cr => cr.AcademicYear == academicYear);
+            }
+
+            return await classRooms.ToListAsync(cancellationToken);
         }
 
-        public async Task<ClassRoom?> GetClassRoom(int id)
+        public async Task<ClassRoom?> GetClassRoom(int id, CancellationToken cancellationToken = default)
         {
-            return await _context.ClassRooms.FindAsync(id);
+            return await _context.ClassRooms.FindAsync(id, cancellationToken);
         }
 
-        public async Task<bool> ClassRoomExists(int id)
+        public async Task<bool> ClassRoomExists(int id, CancellationToken cancellationToken = default)
         {
             return await _context.ClassRooms.AnyAsync<ClassRoom>(cr => cr.Id == id);
         }
 
-        public async Task CreateClassRoom(ClassRoom classRoom)
+        public async Task CreateClassRoom(ClassRoom classRoom, CancellationToken cancellationToken = default)
         {
             await _context.ClassRooms.AddAsync(classRoom);
-            await _context.SaveChangesAsync();
+            await unitOfWork.SaveChangesAsync(cancellationToken);
         }
 
-        public async Task UpdateClassRoom(ClassRoom classRoom)
+        public async Task UpdateClassRoom(ClassRoom classRoom, CancellationToken cancellationToken = default)
         {
             _context.ClassRooms.Update(classRoom);
-            await _context.SaveChangesAsync();
+            await unitOfWork.SaveChangesAsync(cancellationToken);
         }
 
-        public async Task DeleteClassRoom(int id)
+        public async Task DeleteClassRoom(int id, CancellationToken cancellationToken = default)
         {
-            var classRoom = await _context.ClassRooms.FindAsync(id);
+            var classRoom = await _context.ClassRooms.FindAsync(id, cancellationToken);
             if (classRoom != null)
             {
                 _context.ClassRooms.Remove(classRoom);
-                await _context.SaveChangesAsync();
+                await unitOfWork.SaveChangesAsync(cancellationToken);
             }
         }
 
-        public async Task<List<Student>> GetClassRoomStudents(int id)
+        public async Task<List<Student>> GetClassRoomStudents(int id, CancellationToken cancellationToken = default)
         {
             return await _context.Students
                          .Where(s => s.ClassRoomId == id)
-                         .ToListAsync();
+                         .ToListAsync(cancellationToken);
         }
     }
 }

@@ -5,20 +5,20 @@ using StudentTracker.DAL.Entities;
 
 namespace StudentTracker.DAL.Repositories.Interfaces
 {
-    internal interface ITeacherRepository
+    public interface ITeacherRepository
     {
-        Task<IEnumerable<Teacher>> GetAllTeachers();
+        Task<IEnumerable<Teacher>> GetAllTeachers(CancellationToken cancellationToken = default);
 
-        Task<Teacher?> GetTeacherById(int id);
+        Task<Teacher?> GetTeacherById(int id, CancellationToken cancellationToken = default);
 
-        Task CreatTeacher(Teacher teacher);
+        Task CreateTeacher(Teacher teacher, CancellationToken cancellationToken = default);
 
-        Task UpdateTeacher(Teacher teacher);
+        Task UpdateTeacher(Teacher teacher, CancellationToken cancellationToken = default);
 
-        Task DeleteTeacher(int id);
+        Task DeleteTeacher(int id, CancellationToken cancellationToken = default);
 
-        Task<bool> ExistsTeacher(int id);
-        Task <List<Student>> GetTeacherStudents(int id);
-        Task<List<ClassRoom>> GetTeacherClassRooms(int id);
+        Task<bool> ExistsTeacher(int id, CancellationToken cancellationToken = default);
+        Task <List<Student>> GetTeacherStudents(int id, CancellationToken cancellationToken = default);
+        Task<List<ClassRoom>> GetTeacherClassRooms(int id, CancellationToken cancellationToken = default);
     }
 }

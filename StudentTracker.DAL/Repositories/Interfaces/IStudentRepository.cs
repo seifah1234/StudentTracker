@@ -5,13 +5,15 @@ using StudentTracker.DAL.Entities;
 
 namespace StudentTracker.DAL.Repositories.Interfaces
 {
-    internal interface IStudentRepository
+    public interface IStudentRepository
     {
-         Task<IEnumerable<Student>> GetAllStudents();
-         Task<Student?> GetStudent(int id);
-         Task<bool> StudentExists(int id);
-         Task CreateStudent(Student student);
-         Task UpdateStudent(Student student);
+         Task<IEnumerable<Student>> GetAllStudents(CancellationToken cancellationToken = default);
+         Task<Student?> GetStudent(int id, CancellationToken cancellationToken = default);
+         Task<bool> StudentExists(int id, CancellationToken cancellationToken = default);
+         Task CreateStudent(Student student, CancellationToken cancellationToken = default);
+         Task UpdateStudent(Student student, CancellationToken cancellationToken = default);
+
+        Task <IEnumerable<Student>> GetStudentsByClassRoomId(int classRoomId, CancellationToken cancellationToken = default);
 
     }
 }
