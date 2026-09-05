@@ -61,6 +61,12 @@ namespace StudentTracker.DAL.Repositories.Implementations
             return await Task.FromResult(attendances.ToList());
         }
 
+        public async Task<IEnumerable<Attendance>> GetAttendanceByDateAsync(DateTime date, CancellationToken cancellationToken = default)
+        {
+            var attendances = await _context.Attendances.Where(a => a.Date == date).ToListAsync(cancellationToken);
+            return attendances;
+        }
+
         public async Task<Attendance> GetAttendanceByIdAsync(int id, CancellationToken cancellationToken = default)
         {
             var attendance = await _context.Attendances.FindAsync(id, cancellationToken);
@@ -69,6 +75,12 @@ namespace StudentTracker.DAL.Repositories.Implementations
                 throw new KeyNotFoundException($"Attendance with ID {id} not found.");
             }
             return attendance;
+        }
+
+        public async Task<IEnumerable<Attendance>> GetAttendancesByClassIdAsync(int classId, CancellationToken cancellationToken = default)
+        {
+            var attendances = await _context.Attendances.Include(a => a.Student).Where(a => (a.Student != null) ?  a.Student.ClassRoomId == classId : true).ToListAsync(cancellationToken);
+            return attendances;
         }
 
         public async Task<IEnumerable<Attendance>> GetAttendancesByStudentIdAsync(int studentId, CancellationToken cancellationToken = default)

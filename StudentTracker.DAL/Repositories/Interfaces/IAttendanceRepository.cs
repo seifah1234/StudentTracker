@@ -24,5 +24,9 @@ namespace StudentTracker.DAL.Repositories.Interfaces
         Task UpdateAttendanceAsync(Attendance attendance, CancellationToken cancellationToken = default);
 
         Task DeleteAttendanceAsync(int id, CancellationToken cancellationToken = default);
+
+        Task<IEnumerable<Attendance>> GetAttendanceByDateAsync(DateTime date, CancellationToken cancellationToken = default);
+
+        Task<IEnumerable<Attendance>> GetAttendancesByClassIdAsync(int classId, CancellationToken cancellationToken = default);
     }
 }

@@ -65,5 +65,16 @@ namespace StudentTracker.DAL.Repositories.Implementations
         {
             return await _context.Assessments.Where(a => a.StudentId == studentId).ToListAsync(cancellationToken);
         }
+
+        public async Task UpdateAssessmentAsync(Assessment assessment, CancellationToken cancellationToken = default)
+        {
+            _context.Assessments.Update(assessment);
+            await unitOfWork.SaveChangesAsync(cancellationToken);
+        }
+
+        public async Task<IEnumerable<Assessment>> GetAssessmentsByDateAsync(DateTime dateTime, CancellationToken cancellationToken = default)
+        {
+            return await _context.Assessments.Where(a => a.Date == dateTime).ToListAsync(cancellationToken);
+        }
     }
 }

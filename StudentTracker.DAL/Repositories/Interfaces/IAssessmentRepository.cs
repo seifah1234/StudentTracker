@@ -13,10 +13,12 @@ namespace StudentTracker.DAL.Repositories.Interfaces
             CancellationToken cancellationToken = default
             );
         Task <IEnumerable<Assessment>> GetAssessmentsByStudentIdAsync(int studentId, CancellationToken cancellationToken = default);
+        Task <IEnumerable<Assessment>> GetAssessmentsByDateAsync(DateTime dateTime, CancellationToken cancellationToken = default);
 
         Task <Assessment> GetAssessmentByIdAsync(int assessmentId, CancellationToken cancellationToken = default);
 
         Task DeleteAssessmentAsync(int assessmentId, CancellationToken cancellationToken = default);
+        Task UpdateAssessmentAsync(Assessment assessment, CancellationToken cancellationToken = default);
 
         Task CreateAssessmentAsync(Assessment assessment, CancellationToken cancellationToken = default);
 

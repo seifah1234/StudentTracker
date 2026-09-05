@@ -7,7 +7,9 @@ namespace StudentTracker.DAL.Repositories.Interfaces
 {
     public interface ISubjectRepository
     {
-        Task<IEnumerable<Subject>> GetAllSubjectsAsync(CancellationToken cancellationToken = default);
+        Task<IEnumerable<Subject>> GetAllSubjectsAsync(
+            int pageNumber = 1, int pageSize = 10,
+            CancellationToken cancellationToken = default);
         Task<Subject> GetSubjectByIdAsync(int id, CancellationToken cancellationToken = default);
         Task AddSubjectAsync(Subject subject, CancellationToken cancellationToken = default);
         Task UpdateSubjectAsync(Subject subject, CancellationToken cancellationToken = default);

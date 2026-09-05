@@ -40,9 +40,14 @@ namespace StudentTracker.DAL.Repositories.Implementations
             }
         }
 
-        public async Task<IEnumerable<Subject>> GetAllSubjectsAsync(CancellationToken cancellationToken = default)
+        public async Task<IEnumerable<Subject>> GetAllSubjectsAsync(
+            int pageNumber = 1, int pageSize = 10,
+            CancellationToken cancellationToken = default)
         {
-            return await _context.Subjects.ToListAsync(cancellationToken);
+            return await _context.Subjects
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync(cancellationToken);
         }
 
         public async Task<Subject> GetSubjectByIdAsync(int id, CancellationToken cancellationToken = default)
