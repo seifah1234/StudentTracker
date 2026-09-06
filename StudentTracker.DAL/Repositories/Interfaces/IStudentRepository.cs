@@ -14,6 +14,6 @@ namespace StudentTracker.DAL.Repositories.Interfaces
          Task UpdateStudent(Student student, CancellationToken cancellationToken = default);
 
         Task <IEnumerable<Student>> GetStudentsByClassRoomId(int classRoomId, CancellationToken cancellationToken = default);
-
+        Task <IEnumerable<decimal>> GetStudentGrades(int studentId, CancellationToken cancellationToken = default);
     }
 }

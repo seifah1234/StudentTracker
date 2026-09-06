@@ -14,6 +14,6 @@ namespace StudentTracker.DAL.Repositories.Interfaces
         Task AddSubjectAsync(Subject subject, CancellationToken cancellationToken = default);
         Task UpdateSubjectAsync(Subject subject, CancellationToken cancellationToken = default);
         Task DeleteSubjectAsync(int id, CancellationToken cancellationToken = default);
-        Task<IEnumerable<Subject>> GetSubjectsByClassRoomIdAsync(int classRoomId, CancellationToken cancellationToken = default);
+        //Task<IEnumerable<Subject>> GetSubjectsByClassRoomIdAsync(int classRoomId, CancellationToken cancellationToken = default);
     }
 }

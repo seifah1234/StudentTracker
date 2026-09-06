@@ -19,6 +19,6 @@ namespace StudentTracker.DAL.Repositories.Interfaces
         Task UpdateClassRoom(ClassRoom classRoom, CancellationToken cancellationToken = default);
         Task DeleteClassRoom(int id, CancellationToken cancellationToken = default);
         Task<List<Student>> GetClassRoomStudents(int id, CancellationToken cancellationToken = default);
-        
+
     }
 }

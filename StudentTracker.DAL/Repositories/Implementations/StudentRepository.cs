@@ -53,6 +53,15 @@ namespace StudentTracker.DAL.Repositories.Implementations
                          .Where(s => s.ClassRoomId == classRoomId)
                          .ToListAsync(cancellationToken);
         }
+
+        public async Task<IEnumerable<decimal>> GetStudentGrades(int studentId, CancellationToken cancellationToken = default)
+        {
+            return await _context.Assessments
+                .Where(a => a.StudentId == studentId)
+                .Select(a => a.ObtainedMarks)
+                .ToListAsync(cancellationToken);
+        }
+
     }
 
 }

@@ -4,7 +4,8 @@ using System.Text;
 
 namespace StudentTracker.BLL.Interfaces
 {
-    internal interface ILevelCalculatorService
+    public interface ILevelCalculatorService
     {
+        Task<decimal> CalculateLevelAsync(decimal totalPoints, CancellationToken cancellationToken = default);
     }
 }
