@@ -6,7 +6,7 @@ using StudentTracker.Shared.Enums;
 
 namespace StudentTracker.BLL.Interfaces
 {
-    internal interface IClassRoomService
+    public interface IClassRoomService
     {
         Task<IEnumerable<ClassRoom>> GetAllClassRooms(
             Semester? semester = null,

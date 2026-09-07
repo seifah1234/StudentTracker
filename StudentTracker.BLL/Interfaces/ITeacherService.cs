@@ -5,7 +5,7 @@ using StudentTracker.DAL.Entities;
 
 namespace StudentTracker.BLL.Interfaces
 {
-    internal interface ITeacherService
+    public interface ITeacherService
     {
         Task<IEnumerable<Teacher>> GetAllTeachers(CancellationToken cancellationToken = default);
 

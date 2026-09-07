@@ -4,7 +4,7 @@ using System.Text;
 
 namespace StudentTracker.BLL.Interfaces
 {
-    internal interface IAiInsightService
+    public interface IAiInsightService
     {
     }
 }

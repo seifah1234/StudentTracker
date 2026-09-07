@@ -5,7 +5,7 @@ using StudentTracker.DAL.Entities;
 
 namespace StudentTracker.BLL.Interfaces
 {
-    internal interface IStudentService
+    public interface IStudentService
     {
         Task<Student> CreateStudent(Student student, CancellationToken cancellationToken = default);
         Task<Student> UpdateStudent(Student student, CancellationToken cancellationToken = default);

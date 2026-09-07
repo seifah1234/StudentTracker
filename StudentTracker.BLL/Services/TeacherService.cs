@@ -7,7 +7,7 @@ using StudentTracker.DAL.Repositories.Interfaces;
 
 namespace StudentTracker.BLL.Services
 {
-    internal class TeacherService : ITeacherService
+    public class TeacherService : ITeacherService
     {
         private readonly ITeacherRepository _teacherRepository;
 

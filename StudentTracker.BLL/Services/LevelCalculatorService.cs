@@ -7,7 +7,7 @@ using StudentTracker.DAL.Entities;
 
 namespace StudentTracker.BLL.Services
 {
-    internal class LevelCalculatorService : ILevelCalculatorService
+    public class LevelCalculatorService : ILevelCalculatorService
     {
         public readonly ILevelCalculatorService _levelCalculatorService;
         

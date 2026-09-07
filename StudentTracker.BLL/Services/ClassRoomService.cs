@@ -7,7 +7,7 @@ using StudentTracker.DAL.Repositories.Interfaces;
 using StudentTracker.Shared.Enums;
 namespace StudentTracker.BLL.Services
 {
-    internal class ClassRoomService : IClassRoomService
+    public class ClassRoomService : IClassRoomService
     {
         private readonly IClassRoomRepository _classRoomRepository;
 

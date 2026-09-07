@@ -4,7 +4,7 @@ using System.Text;
 
 namespace StudentTracker.BLL.Services
 {
-    internal class AiInsightService
+    public class AiInsightService
     {
     }
 }
