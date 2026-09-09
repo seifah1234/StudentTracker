@@ -1,4 +1,6 @@
 using Microsoft.EntityFrameworkCore;
+using StudentTracker.BLL.Interfaces;
+using StudentTracker.BLL.Services;
 using StudentTracker.DAL.Data;
 using StudentTracker.DAL.Repositories.Implementations;
 using StudentTracker.DAL.Repositories.Interfaces;
@@ -20,6 +22,15 @@ builder.Services.AddScoped<ISubjectRepository, SubjectRepository>();
 builder.Services.AddScoped<IClassRoomRepository, ClassRoomRepository>();
 builder.Services.AddScoped<ITeacherRepository, TeacherRepository>();
 builder.Services.AddScoped<IAttendanceRepository, AttendanceRepository>();
+
+builder.Services.AddScoped<ITeacherService, TeacherService>();
+builder.Services.AddScoped<IStudentService, StudentService>();
+builder.Services.AddScoped<IAttendanceService, AttendanceService>();
+builder.Services.AddScoped<IAssessmentService, AssessmentService>();
+builder.Services.AddScoped<IClassRoomService, ClassRoomService>();
+builder.Services.AddScoped<ISubjectService, SubjectService>();
+builder.Services.AddScoped<ILevelCalculatorService, LevelCalculatorService>();
+
 
 var app = builder.Build();
 

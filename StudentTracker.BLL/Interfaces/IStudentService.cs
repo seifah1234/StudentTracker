@@ -1,7 +1,8 @@
-﻿using System;
+﻿using StudentTracker.DAL.Entities;
+using StudentTracker.Shared.Enums;
+using System;
 using System.Collections.Generic;
 using System.Text;
-using StudentTracker.DAL.Entities;
 
 namespace StudentTracker.BLL.Interfaces
 {
@@ -13,6 +14,7 @@ namespace StudentTracker.BLL.Interfaces
         Task<Student?> GetStudent(int id, CancellationToken cancellationToken = default);
         Task <IEnumerable<Student>> GetStudentsByClassRoomId(int classRoomId, CancellationToken cancellationToken = default);
          Task<bool> StudentExists(int id, CancellationToken cancellationToken = default);
-         Task <decimal> GetStudentGrades(int studentId, CancellationToken cancellationToken = default);
+         Task <StudentLevel> GetStudentTotalLevel(int studentId, CancellationToken cancellationToken = default);
+         Task <IEnumerable<StudentLevel>> GetStudentSubjectsLevel(int studentId, CancellationToken cancellationToken = default);
     }
 }

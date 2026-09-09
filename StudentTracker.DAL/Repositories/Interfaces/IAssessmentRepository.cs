@@ -8,8 +8,6 @@ namespace StudentTracker.DAL.Repositories.Interfaces
     public interface IAssessmentRepository
     {
         Task <IEnumerable<Assessment>> GetAllAssessmentsAsync(
-            DateTime? startDate = null,
-            DateTime? endDate = null,
             CancellationToken cancellationToken = default
             );
         Task <IEnumerable<Assessment>> GetAssessmentsByStudentIdAsync(int studentId, CancellationToken cancellationToken = default);

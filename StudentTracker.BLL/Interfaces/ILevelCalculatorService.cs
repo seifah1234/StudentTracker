@@ -1,4 +1,5 @@
-﻿using System;
+﻿using StudentTracker.Shared.Enums;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -6,6 +7,8 @@ namespace StudentTracker.BLL.Interfaces
 {
     public interface ILevelCalculatorService
     {
-        Task<decimal> CalculateLevelAsync(decimal totalPoints, CancellationToken cancellationToken = default);
+        Task<StudentLevel> CalculateLevelAsync(decimal totalPoints,decimal maxPoints, CancellationToken cancellationToken = default);
+        Task<decimal> CalculatePercentageAsync(decimal totalPoints, decimal maxPoints, CancellationToken cancellationToken = default);
+
     }
 }

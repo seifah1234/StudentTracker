@@ -4,7 +4,13 @@ using System.Text;
 
 namespace StudentTracker.Shared.Enums
 {
-    internal class StudentLevel
+    public enum StudentLevel
     {
+        Excellent = 1,
+        Normal = 2,
+
+        Poor = 3,
+
+        Failing = 4
     }
 }

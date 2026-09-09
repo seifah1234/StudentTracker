@@ -51,9 +51,9 @@ namespace StudentTracker.BLL.Services
             return await _classRoomRepository.GetClassRoomStudents(id, cancellationToken);
         }
 
-        public async Task<ClassRoom> UpdateClassRoom(ClassRoom classRoom, CancellationToken cancellationToken = default)
+        public async Task<ClassRoom> UpdateClassRoom(int id,ClassRoom classRoom, CancellationToken cancellationToken = default)
         {
-            var exists = await _classRoomRepository.ClassRoomExists(classRoom.Id, cancellationToken);
+            var exists = await _classRoomRepository.ClassRoomExists(id, cancellationToken);
             if (!exists) throw new KeyNotFoundException($"ClassRoom with ID {classRoom.Id} not found.");
             await _classRoomRepository.UpdateClassRoom(classRoom, cancellationToken);
             return classRoom;

@@ -17,7 +17,7 @@ namespace StudentTracker.BLL.Interfaces
 
         Task<ClassRoom> CreateClassRoom(ClassRoom classRoom, CancellationToken cancellationToken = default);
 
-        Task<ClassRoom> UpdateClassRoom(ClassRoom classRoom, CancellationToken cancellationToken = default);
+        Task<ClassRoom> UpdateClassRoom(int id, ClassRoom classRoom, CancellationToken cancellationToken = default);
 
         Task<bool> DeleteClassRoom(int id, CancellationToken cancellationToken = default);
         Task<bool> ClassRoomExists(int id, CancellationToken cancellationToken = default);

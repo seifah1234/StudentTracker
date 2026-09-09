@@ -9,9 +9,6 @@ namespace StudentTracker.DAL.Repositories.Interfaces
     public interface IAttendanceRepository
     {
         Task<IEnumerable<Attendance>> GetAllAttendancesAsync(
-            AttendanceStatus? status = null,
-            DateTime? startDate = null,
-            DateTime? endDate = null,
             CancellationToken cancellationToken = default
             );
 

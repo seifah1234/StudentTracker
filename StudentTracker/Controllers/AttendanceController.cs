@@ -1,76 +1,72 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using StudentTracker.BLL.DTOs;
+using StudentTracker.BLL.Interfaces;
 using StudentTracker.DAL.Entities;
+using StudentTracker.Shared.Enums;
 namespace StudentTracker.PL.Controllers
 {
     [ApiController]
-    [Route("api/[AttendanceController]")]
+    [Route("api/[controller]")]
     public class AttendanceController : ControllerBase
     {
-        private static List<Attendance> attendances = new List<Attendance>();
-        [HttpPost("add")]
-        public IActionResult AddAttendance([FromBody] Attendance attendance)
-        {
-            attendances.Add(attendance);
-            return Ok(attendance);
-        }
-        [HttpGet("all")]
+        private IAttendanceService _attendanceService;
 
-        public IActionResult GetAllAttendances()
+        public AttendanceController(IAttendanceService attendanceService)
         {
+            _attendanceService = attendanceService;
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddAttendance([FromBody] AttendanceDto attendance)
+        {
+            var createdAttendance = await _attendanceService.AddAttendanceAsync(attendance);
+            return Ok(createdAttendance);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAllAttendances(int? studentId = null, DateTime? date = null, DateTime? startDate = null, DateTime? endDate = null, int? classId = null, AttendanceStatus? status = null)
+        {
+            var attendances = await _attendanceService.GetAllAttendanceAsync(studentId, date, startDate, endDate, classId, status);
             return Ok(attendances);
         }
+
         [HttpGet("{id}")]
-        public IActionResult GetAttendanceById(int id)
+        public async Task<IActionResult> GetAttendanceById(int id)
         {
-            var attendance = attendances.FirstOrDefault(s=>s.Id==id);
+            var attendance = await _attendanceService.GetAttendanceByIdAsync(id);
             if(attendance==null)
             {
                 return NotFound();
             }
             return Ok(attendance);
         }
+
         [HttpPut("{id}")]
-        public IActionResult UpdateAttendance([FromBody] Attendance attendance)
+        public async Task<IActionResult> UpdateAttendance(int id, [FromBody] AttendanceDto attendance)
         {
-            var attendanceId=attendance.Id;
-            var attendanceUpdate=attendances.FirstOrDefault(s=>s.Id==attendanceId);
+            var attendanceUpdate=await _attendanceService.GetAttendanceByIdAsync(id);
+
             if(attendanceUpdate==null)
             {
                 return NotFound();
             }
-            attendanceUpdate.Notes=attendance.Notes;
-            attendanceUpdate.Date=attendance.Date;  
-            attendanceUpdate.Status=attendance.Status;
+            attendanceUpdate.Notes = attendance.Notes;
+            attendanceUpdate.Date = attendance.Date;  
+            attendanceUpdate.Status = attendance.Status;
+            await _attendanceService.UpdateAttendanceAsync(id, attendanceUpdate);
             return Ok(attendanceUpdate);
         }
+
         [HttpDelete("{id}")]
-        public IActionResult DeleteAttendance(int id)
+        public async Task<IActionResult> DeleteAttendance(int id)
         {
-            var attendance=attendances.FirstOrDefault(s=>s.Id==id);
+            var attendance=await _attendanceService.GetAttendanceByIdAsync(id);
             if(attendance==null)
             {
                 return NotFound();
             }
-            attendances.Remove(attendance);
+            await _attendanceService.DeleteAttendanceAsync(id);
             return Ok(new { message = "Attendance deleted successfully" });
-        }
-        [HttpGet("student/{studentId}")]
-        public IActionResult GetAttendancesByStudentId(int studentId)
-        {
-            var studentAttendances = attendances.Where(s => s.StudentId == studentId).ToList();
-            return Ok(studentAttendances);
-        }
-        [HttpGet("date/{date}")]
-        public IActionResult GetAttendanceByDateAsync(DateTime date)
-        {
-            var attendancesByDate = attendances.Where(s => s.Date == date).ToList();
-            return Ok(attendancesByDate);
-        }
-        [HttpGet("classRoom/{classId}")]
-        public IActionResult GetAttendancesByClassIdAsync(int classId)
-        {
-            var attendanceByClass = attendances.Where(s=>s.Id==classId).ToList();
-            return Ok(attendanceByClass);
         }
     }
 }

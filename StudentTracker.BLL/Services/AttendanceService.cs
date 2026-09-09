@@ -1,6 +1,7 @@
 ﻿using StudentTracker.BLL.DTOs;
 using StudentTracker.BLL.Interfaces;
 using StudentTracker.DAL.Repositories.Interfaces;
+using StudentTracker.Shared.Enums;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -18,7 +19,7 @@ namespace StudentTracker.BLL.Services
             this.mapper = mapper;
         }
 
-        public async Task<AttendanceDto> AddAttendanceAsync(AttendanceDto attendanceDto)
+        public async Task<AttendanceDto> AddAttendanceAsync(AttendanceDto attendanceDto, CancellationToken cancellationToken = default)
         {
             if (attendanceDto == null)
             {
@@ -36,40 +37,67 @@ namespace StudentTracker.BLL.Services
             }
 
             var attendanceEntity = mapper.Map<StudentTracker.DAL.Entities.Attendance>(attendanceDto);
-            await attendanceRepository.CreateAttendanceAsync(attendanceEntity);
+            await attendanceRepository.CreateAttendanceAsync(attendanceEntity, cancellationToken);
             return attendanceDto;
         }
 
-        public async Task<bool> DeleteAttendanceAsync(int attendanceId)
+        public async Task<bool> DeleteAttendanceAsync(int attendanceId, CancellationToken cancellationToken = default)
         {
             if (attendanceId <= 0)
             {
                 throw new ArgumentException("AttendanceId must be greater than zero.", nameof(attendanceId));
             }
 
-            await attendanceRepository.DeleteAttendanceAsync(attendanceId);
+            await attendanceRepository.DeleteAttendanceAsync(attendanceId, cancellationToken);
             return true;
         }
 
-        public async Task<IEnumerable<AttendanceDto>> GetAllAttendanceAsync()
+        public async Task<IEnumerable<AttendanceDto>> GetAllAttendanceAsync(
+            int? studentId = null,
+            DateTime? date = null,
+            DateTime? startDate = null,
+            DateTime? endDate = null,
+            int? classId = null,
+            AttendanceStatus? status = null,
+            CancellationToken cancellationToken = default)
         {
-            var attendanceEntities = await attendanceRepository.GetAllAttendancesAsync();
+            var attendanceEntities = await attendanceRepository.GetAllAttendancesAsync(cancellationToken);
+            if (attendanceEntities == null)
+            {
+                throw new ArgumentException(nameof(attendanceEntities));
+            }
+
+            if (studentId != null)
+            {
+                attendanceEntities = attendanceEntities.Where(x => x.StudentId == studentId);
+            }
+
+            if (date != null)
+            {
+                attendanceEntities = attendanceEntities.Where(x => x.Date.Date == date.Value.Date);
+            }
+
+            if (startDate != null && endDate != null)
+            {
+                attendanceEntities = attendanceEntities.Where(x => x.Date.Date >= startDate.Value.Date && x.Date.Date <= endDate.Value.Date);
+            }
+
+            if (classId != null)
+            {
+                attendanceEntities = attendanceEntities.Where(x => x.Student.ClassRoomId == classId);
+            }
+
+            if (status != null)
+            {
+                attendanceEntities = attendanceEntities.Where(x => x.Status == status);
+            }
+
             return attendanceEntities.Select(x => mapper.Map<AttendanceDto>(x));
         }
 
-        public async Task<IEnumerable<AttendanceDto>> GetAttendanceByDateAsync(DateTime date)
-        {
-            var attendanceEntities = await attendanceRepository.GetAttendanceByDateAsync(date);
-            return attendanceEntities.Select(x => mapper.Map<AttendanceDto>(x));
-        }
 
-        public async Task<IEnumerable<AttendanceDto>> GetAttendanceByDateRangeAsync(DateTime startDate, DateTime endDate)
-        {
-            var attendanceEntities = await attendanceRepository.GetAllAttendancesAsync(startDate: startDate, endDate: endDate);
-            return attendanceEntities.Select(x => mapper.Map<AttendanceDto>(x));
-        }
 
-        public async Task<AttendanceDto> GetAttendanceByIdAsync(int attendanceId)
+        public async Task<AttendanceDto> GetAttendanceByIdAsync(int attendanceId, CancellationToken cancellationToken)
         {
             var attendanceEntity = await attendanceRepository.GetAttendanceByIdAsync(attendanceId);
             if (attendanceEntity == null)
@@ -81,27 +109,9 @@ namespace StudentTracker.BLL.Services
             return attendanceDto;
         }
 
-        public async Task<IEnumerable<AttendanceDto>> GetAttendanceByStudentIdAsync(int studentId)
-        {
-            if (studentId <= 0)
-            {
-                throw new ArgumentException("StudentId must be greater than zero.", nameof(studentId));
-            }
-            var attendanceEntities = await attendanceRepository.GetAttendancesByStudentIdAsync(studentId);
-            return attendanceEntities.Select(x => mapper.Map<AttendanceDto>(x));
-        }
 
-        public async Task<IEnumerable<AttendanceDto>> GetAttendancesByClassIdAsync(int classId)
-        {
-            if (classId <= 0)
-            {
-                throw new ArgumentException("ClassId must be greater than zero.", nameof(classId));
-            }
-            var attendanceEntities = await attendanceRepository.GetAttendancesByClassIdAsync(classId);
-            return attendanceEntities.Select(x => mapper.Map<AttendanceDto>(x));
-        }
 
-        public async Task<AttendanceDto> UpdateAttendanceAsync(int id, AttendanceDto attendanceDto)
+        public async Task<AttendanceDto> UpdateAttendanceAsync(int id, AttendanceDto attendanceDto, CancellationToken cancellationToken)
         {
             var existingAttendance = await attendanceRepository.GetAttendanceByIdAsync(id);
             if (existingAttendance == null)

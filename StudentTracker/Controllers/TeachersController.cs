@@ -1,85 +1,79 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using StudentTracker.BLL.Interfaces;
 using StudentTracker.DAL.Entities;
 
 namespace StudentTracker.PL.Controllers
 {
     [ApiController]
-    [Route("api/[TeachersController]")]
+    [Route("api/[controller]")]
     public class TeachersController : ControllerBase
     {
-        private static List<Teacher> teachers = new List<Teacher>();
+        private ITeacherService _teacherService;
 
-        [HttpPost("add")]
-        public IActionResult AddTeacher([FromBody] Teacher teacher)
+        public TeachersController(ITeacherService teacherService)
         {
-            teachers.Add(teacher);
+            _teacherService = teacherService;
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddTeacher([FromBody] Teacher teacher)
+        {
+            await _teacherService.CreateTeacher(teacher);
+
             return Ok(teacher);
         }
-        [HttpGet("all")]
-        public IActionResult GetAllTeachers()
+
+        [HttpGet]
+        public async Task<IActionResult> GetAllTeachers()
         {
+            var teachers = await _teacherService.GetAllTeachers();
             return Ok(teachers);
         }
+
         [HttpGet("{id}")]
-        public IActionResult GetTeacherById(int id)
+        public async Task<IActionResult> GetTeacherById(int id)
         {
-            var teacher = teachers.FirstOrDefault(s=>s.Id==id);
-            if (teacher==null)
+            var teacher = await _teacherService.GetTeacher(id);
+            if (teacher == null)
             {
                 return NotFound();
             }
             return Ok(teacher);
         }
+
         [HttpPut("{id}")]
-        public IActionResult UpdateTeacher([FromBody]Teacher teacher)
+        public async Task<IActionResult> UpdateTeacher(int id, [FromBody]Teacher teacher)
         {
-            var teacherId=teacher.Id;
-            var existTeacher=teachers.FirstOrDefault(s=>s.Id==teacherId);
-            if(existTeacher==null)
-            {
-                return NotFound();
-            }
-            existTeacher.Name=teacher.Name;
-            existTeacher.PhoneNumber=teacher.PhoneNumber;
-            existTeacher.Email=teacher.Email;
-            return Ok(existTeacher);
+            await _teacherService.UpdateTeacher(id, teacher);
+            return Ok(teacher);
         }
+
         [HttpDelete("{id}")]
-        public IActionResult DeleteTeacher(int id)
+        public async Task<IActionResult> DeleteTeacher(int id)
         {
-            var teacher=teachers.FirstOrDefault(s=>s.Id==id);
-            if(teacher==null)
-            {
-                return NotFound();
-            }
-            teachers.Remove(teacher);
+            await _teacherService.DeleteTeacher(id);
             return Ok(new { message = "Teacher deleted successfully" });
         }
-        [HttpGet("classroom/{classRoomId}")]
-        public IActionResult GetTeacherClassRooms(int TeacherId)
+
+        [HttpGet("classroom/{teacherId}")]
+        public async Task<IActionResult> GetTeacherClassRooms(int teacherId)
         {
-            var teacher=teachers.FirstOrDefault(s=>s.Id==TeacherId);
-            if(teacher==null)
-            {
-                return NotFound();
-            }
-            return Ok(teacher.ClassRooms);
+            var teacherClassRooms = await _teacherService.GetTeacherClassRooms(teacherId);
+            return Ok(teacherClassRooms);
         }
+
         [HttpGet("students/{teacherId}")]
-        public IActionResult GetTeacherStudents(int teacherId)
+        public async Task<IActionResult> GetTeacherStudents(int teacherId)
         {
-            List<Student> students = new List<Student>();
-            var matchedStudents = students.Where(s => s.Id == teacherId).ToList();
-            if(matchedStudents==null)
-            {
-                return NotFound();
-            }       
-            return Ok(matchedStudents);    
+            var teacherStudents = await _teacherService.GetTeacherStudents(teacherId);
+            return Ok(teacherStudents);
         }
+
         [HttpGet("exists/{id}")]
-        public IActionResult TeacherExists(int id)
+        public async Task<IActionResult> TeacherExists(int id)
         {
-            var teacher=teachers.Any(s=>s.Id==id);
+            var teacher = await _teacherService.ExistsTeacher(id);
+
             return Ok(teacher);
         }
         

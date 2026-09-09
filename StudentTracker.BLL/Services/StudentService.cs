@@ -1,19 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using StudentTracker.BLL.Interfaces;
+﻿using StudentTracker.BLL.Interfaces;
 using StudentTracker.DAL.Entities;
-using StudentTracker.DAL.Repositories.Implementations;
 using StudentTracker.DAL.Repositories.Interfaces;
+using StudentTracker.Shared.Enums;
 
 namespace StudentTracker.BLL.Services
 {
-    public class StudentService(IStudentRepository studentRepository) : IStudentService
+    public class StudentService : IStudentService
     {
-        private readonly IStudentRepository _studentRepository = studentRepository;
+        private readonly IStudentRepository _studentRepository;
         public readonly ILevelCalculatorService _levelCalculatorService;
+
+        public StudentService(IStudentRepository studentRepository, ILevelCalculatorService levelCalculatorService)
+        {
+            _studentRepository = studentRepository;
+            _levelCalculatorService = levelCalculatorService;
+        }
 
         public async Task<Student> CreateStudent(Student student, CancellationToken cancellationToken)
         {
@@ -54,7 +55,7 @@ namespace StudentTracker.BLL.Services
             return _studentRepository.GetStudentsByClassRoomId(classRoomId, cancellationToken);
         }
 
-        public async Task<decimal> GetStudentGrades(int studentId, CancellationToken cancellationToken = default)
+        public async Task<StudentLevel> GetStudentTotalLevel(int studentId, CancellationToken cancellationToken = default)
         {
             var studentExists = await _studentRepository.StudentExists(studentId, cancellationToken);
             if (!studentExists)
@@ -62,16 +63,45 @@ namespace StudentTracker.BLL.Services
                 throw new KeyNotFoundException($"Student with ID {studentId} was not found.");
             }
 
-            var grades = await _studentRepository.GetStudentGrades(studentId, cancellationToken);
-            decimal totalGrades = grades.Sum();
-            var level = await _levelCalculatorService.CalculateLevelAsync(totalGrades, cancellationToken);
-            return totalGrades;
+            var assessments = await _studentRepository.GetStudentAllAssessments(studentId, cancellationToken);
+            decimal totalObtainedGrades = assessments.Sum(a => a.ObtainedMarks);
+            decimal totalMaxGrades = assessments.Sum(a => a.MaximumMarks);
+            var level = await _levelCalculatorService.CalculateLevelAsync(totalObtainedGrades, totalMaxGrades, cancellationToken);
+            return level;
         }
 
 
         public Task<bool> StudentExists(int id, CancellationToken cancellationToken)
         {
             return _studentRepository.StudentExists(id, cancellationToken);
+        }
+
+        public async Task<IEnumerable<StudentLevel>> GetStudentSubjectsLevel(int studentId, CancellationToken cancellationToken = default)
+        {
+            var studentExists = await _studentRepository.StudentExists(studentId, cancellationToken);
+            if (!studentExists)
+            {
+                throw new KeyNotFoundException($"Student with ID {studentId} was not found.");
+            }
+            var studentAssessmentsTask = await _studentRepository.GetStudentAllAssessments(studentId, cancellationToken);
+            var studentSubjectLevels = studentAssessmentsTask.GroupBy(a => a.SubjectId)
+                .Select(g =>
+                {
+                    var totalObtainedGrades = g.Sum(a => a.ObtainedMarks);
+                    var totalMaxGrades = g.Sum(a => a.MaximumMarks);
+                    return new
+                    {
+                        SubjectId = g.Key,
+                        TotalObtainedGrades = totalObtainedGrades,
+                        TotalMaxGrades = totalMaxGrades
+                    };
+                })
+                .Select(async x =>
+                {
+                    var level = await _levelCalculatorService.CalculateLevelAsync(x.TotalObtainedGrades, x.TotalMaxGrades, cancellationToken);
+                    return level;
+                });
+            return await Task.WhenAll(studentSubjectLevels);
         }
     }
 }

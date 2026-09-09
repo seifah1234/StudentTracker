@@ -40,9 +40,9 @@ namespace StudentTracker.DAL.Repositories.Implementations
             }
         }
 
-        public Task<IEnumerable<Assessment>> GetAllAssessmentsAsync(DateTime? startDate = null, DateTime? endDate = null, CancellationToken cancellationToken = default)
+        public Task<IEnumerable<Assessment>> GetAllAssessmentsAsync(CancellationToken cancellationToken = default)
         {
-            throw new NotImplementedException();
+            return Task.FromResult<IEnumerable<Assessment>>(_context.Assessments.AsNoTracking().ToList());
         }
 
         public async Task<Assessment> GetAssessmentByIdAsync(int assessmentId, CancellationToken cancellationToken = default)

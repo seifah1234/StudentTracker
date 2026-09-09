@@ -54,13 +54,14 @@ namespace StudentTracker.DAL.Repositories.Implementations
                          .ToListAsync(cancellationToken);
         }
 
-        public async Task<IEnumerable<decimal>> GetStudentGrades(int studentId, CancellationToken cancellationToken = default)
+        public async Task<IEnumerable<Assessment>> GetStudentAllAssessments(int studentId, CancellationToken cancellationToken = default)
         {
             return await _context.Assessments
+                .Include(a => a.Subject)
                 .Where(a => a.StudentId == studentId)
-                .Select(a => a.ObtainedMarks)
                 .ToListAsync(cancellationToken);
         }
+
 
     }
 

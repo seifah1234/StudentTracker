@@ -56,10 +56,10 @@ namespace StudentTracker.BLL.Services
             return _teacherRepository.GetTeacherStudents(id, cancellationToken);
         }
 
-        async Task<Teacher> ITeacherService.UpdateTeacher(Teacher teacher, CancellationToken cancellationToken)
+        async Task<Teacher> ITeacherService.UpdateTeacher(int id, Teacher teacher, CancellationToken cancellationToken)
         {
-            var teacherExists = await _teacherRepository.ExistsTeacher(teacher.Id, cancellationToken);
-            if (!teacherExists) throw new KeyNotFoundException($"Teacher with ID {teacher.Id} not found");
+            var teacherExists = await _teacherRepository.ExistsTeacher(id, cancellationToken);
+            if (!teacherExists) throw new KeyNotFoundException($"Teacher with ID {id} not found");
             await _teacherRepository.UpdateTeacher(teacher, cancellationToken);
             return teacher;
         }

@@ -1,70 +1,93 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using StudentTracker.BLL.Interfaces;
 using StudentTracker.DAL.Entities;
 
 namespace StudentTracker.PL.Controllers
 {
     [ApiController]
-    [Route("api/[StudentsController]")]
+    [Route("api/[controller]")]
     public class StudentsController : ControllerBase
     {
-        private static List<Student> students = new List<Student>();
+        private IStudentService _studentService;
 
-        [HttpPost("add")]
-        public IActionResult AddStudent([FromBody] Student student)
+        public StudentsController(IStudentService studentService)
         {
-            students.Add(student);
-            return Ok(student);
+            _studentService = studentService;
         }
 
-        [HttpGet("all")]
-        public IActionResult GetAllStudents()
+
+        [HttpPost]
+        public async Task<IActionResult> AddStudent([FromBody] Student student)
         {
+            var createdStudent = await _studentService.CreateStudent(student, CancellationToken.None);
+            return Ok(createdStudent);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAllStudents()
+        {
+            var students = await _studentService.GetAllStudents(CancellationToken.None);
             return Ok(students);
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetStudentById(int id)
+        public async Task<IActionResult> GetStudentById(int id)
         {
-            var student = students.FirstOrDefault(s=>s.Id==id);
+            var student = await _studentService.GetStudent(id, CancellationToken.None);
             if (student == null)
             {
                 return NotFound();
             }
-            return Ok(student);
-        }
-        [HttpPut("{id}")]
-        public IActionResult UpdateStudent([FromBody] Student updatedStudent)
-        {
-            var id = updatedStudent.Id;
-            var student=students.FirstOrDefault(s=>s.Id==id);
-            if(student==null)
-            {
-                return NotFound();
-            }
-            student.Name=updatedStudent.Name;
-            student.ParentPhoneNumber=updatedStudent.ParentPhoneNumber;
-            student.BirthDate=updatedStudent.BirthDate;
-            student.NationalId=updatedStudent.NationalId;
-            student.Attendances=updatedStudent.Attendances;
-            student.Assessments=updatedStudent.Assessments;
             return Ok(student);
         }
 
-        [HttpGet("grades/{studentId}")]
-        public IActionResult GetStudentGrades(int studentId)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateStudent([FromBody] Student updatedStudent)
         {
-            var student = students.FirstOrDefault(s => s.Id == studentId);
+            var id = updatedStudent.Id;
+            var student = await _studentService.GetStudent(id, CancellationToken.None);
+            if(student == null)
+            {
+                return NotFound();
+            }
+            student.Name = updatedStudent.Name;
+            student.ParentPhoneNumber = updatedStudent.ParentPhoneNumber;
+            student.BirthDate = updatedStudent.BirthDate;
+            student.NationalId = updatedStudent.NationalId;
+            student.Attendances = updatedStudent.Attendances;
+            student.Assessments =updatedStudent.Assessments;
+            return Ok(student);
+        }
+
+        [HttpGet("total-level/{studentId}")]
+        public async Task<IActionResult> GetStudentTotalLevel(int studentId)
+        {
+            var student = await _studentService.GetStudent(studentId, CancellationToken.None);
             if (student == null)
             {
                 return NotFound();
             }
-            return Ok(student.Assessments);
+            var totalLevel = _studentService.GetStudentTotalLevel(studentId);
+            return Ok(totalLevel);
         }
+
         [HttpGet("exists/{id}")]
-        public IActionResult StudentExists(int id)
+        public async Task<IActionResult> StudentExists(int id)
         {
-            var studentExists = students.Any(s=>s.Id==id);
-            return Ok(studentExists);
+            var student = await _studentService.GetStudent(id, CancellationToken.None);
+            return Ok(student != null);
+        }
+
+        [HttpGet("subjectsLevels/{studentId}")]
+        public async Task<IActionResult> GetStudentSubjectsLevels(int studentId)
+        {
+            var student = await _studentService.GetStudent(studentId, CancellationToken.None);
+            if (student == null)
+            {
+                return NotFound();
+            }
+            var subjectsLevels = await _studentService.GetStudentSubjectsLevel(studentId);
+            return Ok(subjectsLevels.Select(s => s.ToString()));
         }
     }
 }

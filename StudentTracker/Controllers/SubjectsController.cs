@@ -1,57 +1,56 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using StudentTracker.BLL.DTOs;
+using StudentTracker.BLL.Interfaces;
 using StudentTracker.DAL.Entities;
 namespace StudentTracker.PL.Controllers
 {
     [ApiController]
-    [Route("api/[SubjectsController]")]
+    [Route("api/[controller]")]
+
     public class SubjectsController : ControllerBase
     {
-        private static List<Subject> subjects = new List<Subject>();
-        [HttpPost("add")]
-        public IActionResult AddSubject([FromBody] Subject subject)
+        private ISubjectService _subjectService;
+
+        public SubjectsController(ISubjectService subjectService)
         {
-            subjects.Add(subject);
+            _subjectService = subjectService;
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddSubject([FromBody] SubjectDto subject)
+        {
+            await _subjectService.CreateSubjectAsync(subject);
             return Ok(subject);
         }
-        [HttpGet("all")]
-        public IActionResult GetAllSubjects()
+        [HttpGet]
+        public async Task<IActionResult> GetAllSubjects()
         {
+            var subjects = await _subjectService.GetAllSubjectsAsync();
             return Ok(subjects);
         }       
+
         [HttpGet("{id}")]
-        public IActionResult GetSubjectById(int id)
+        public async Task<IActionResult> GetSubjectById(int id)
         {
-            var subject = subjects.FirstOrDefault(s=>s.Id==id);
+            var subject = await _subjectService.GetSubjectByIdAsync(id);
             if(subject==null)
             {
                 return NotFound();
             }
             return Ok(subject);
         }
+
         [HttpPut("{id}")]
-        public IActionResult UpdateSubject([FromBody] Subject subject)
+        public async Task<IActionResult> UpdateSubject(int id, [FromBody] SubjectDto subject)
         {
-            var subjectId=subject.Id;
-            var subjectUpdate=subjects.FirstOrDefault(s=>s.Id==subjectId);
-            if(subjectUpdate==null)
-            {
-                return NotFound();
-            }
-            subjectUpdate.Name=subject.Name;
-            subjectUpdate.Assessments=subject.Assessments;  
-            subjectUpdate.MaximumMarks=subject.MaximumMarks;
-            subjectUpdate.Description=subject.Description;
-            return Ok(subjectUpdate);
+            await _subjectService.UpdateSubjectAsync(id, subject);
+            return Ok(subject);
         }
+
         [HttpDelete("{id}")]
-        public IActionResult DeleteSubject(int id)
+        public async Task<IActionResult> DeleteSubject(int id)
         {
-            var subject=subjects.FirstOrDefault(s=>s.Id==id);
-            if(subject==null)
-            {
-                return NotFound();
-            }
-            subjects.Remove(subject);
+            await _subjectService.DeleteSubjectAsync(id);
             return Ok(new { message = "Subject deleted successfully" });
         }   
     }

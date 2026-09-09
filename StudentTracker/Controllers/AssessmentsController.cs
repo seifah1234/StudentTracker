@@ -1,76 +1,62 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using StudentTracker.BLL.DTOs;
+using StudentTracker.BLL.Interfaces;
 using StudentTracker.DAL.Entities;
 namespace StudentTracker.PL.ControllerBases
 {
     [ApiController]
-    [Route("api/[AssessmentsController]")]
+    [Route("api/[controller]")]
     public class AssessmentsController : ControllerBase
     {
-        private static List<Assessment> assessments = new List<Assessment>();
-        [HttpPost("add")]
-        public IActionResult AddAssessment([FromBody] Assessment assessment)
+        private IAssessmentService _assessmentService;
+
+        public AssessmentsController(IAssessmentService assessmentService)
         {
-            assessments.Add(assessment);
-            return Ok(assessment);
+            _assessmentService = assessmentService;
         }
-        [HttpGet("all")]
-        public IActionResult GetAllAssessments()
+
+        [HttpPost]
+        public async Task<IActionResult> AddAssessment([FromBody] AssessmentDto assessment)
         {
+            var addedAssessment = await _assessmentService.AddAssessmentAsync(assessment);
+            return Ok(addedAssessment);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAllAssessments(int? studentId = null, int? subjectId = null, DateTime? date = null)
+        {
+            var assessments = await _assessmentService.GetAllAssessmentsAsync(studentId, subjectId, date);
             return Ok(assessments);
-        }       
+        }    
+        
         [HttpGet("{id}")]
-        public IActionResult GetAssessmentById(int id)
+        public async Task<IActionResult> GetAssessmentById(int id)
         {
-            var assessment = assessments.FirstOrDefault(s=>s.Id==id);
+            var assessment = await _assessmentService.GetAssessmentByIdAsync(id);
             if(assessment==null)
             {
                 return NotFound();
             }
             return Ok(assessment);
         }
+
         [HttpPut("{id}")]
-        public IActionResult UpdateAssessment([FromBody] Assessment assessment)
+        public async Task<IActionResult> UpdateAssessment(int id, [FromBody] AssessmentDto assessment)
         {
-            var assessmentId=assessment.Id;
-            var assessmentUpdate=assessments.FirstOrDefault(s=>s.Id==assessmentId);
-            if(assessmentUpdate==null)
+            var assessmentUpdate=await _assessmentService.GetAssessmentByIdAsync(id);
+            if(assessmentUpdate == null)
             {
                 return NotFound();
             }
-            assessmentUpdate.Name=assessment.Name;
-            assessmentUpdate.MaximumMarks=assessment.MaximumMarks;  
-            assessmentUpdate.Notes=assessment.Notes;
-            assessmentUpdate.ObtainedMarks=assessment.ObtainedMarks;
+            await _assessmentService.UpdateAssessmentAsync(id, assessment);
             return Ok(assessmentUpdate);
         }
+
         [HttpDelete("{id}")]
-        public IActionResult DeleteAssessment(int id)
+        public async Task<IActionResult> DeleteAssessment(int id)
         {
-            var assessment=assessments.FirstOrDefault(s=>s.Id==id);
-            if(assessment==null)
-            {
-                return NotFound();
-            }
-            assessments.Remove(assessment);
+            await _assessmentService.DeleteAssessmentAsync(id);
             return Ok(new { message = "Assessment deleted successfully" });
-        }
-        [HttpGet("student/{studentId}")]
-        public IActionResult GetAssessmentsByStudentId(int studentId)
-        {
-            var studentAssessments = assessments.Where(s => s.StudentId == studentId).ToList();
-            return Ok(studentAssessments);
-        }
-        [HttpGet("subject/{subjectId}")]
-        public IActionResult GetAssessmentsBySubjectId(int subjectId)
-        {
-            var subjectAssessments = assessments.Where(s => s.SubjectId == subjectId).ToList();
-            return Ok(subjectAssessments);
-        }
-        [HttpGet("date/{date}")]
-        public IActionResult GetAssessmentsByDate(DateTime date)
-        {
-            var dateAssessments = assessments.Where(s => s.Date == date).ToList();
-            return Ok(dateAssessments);
         }
     }
 }

@@ -7,20 +7,14 @@ namespace StudentTracker.BLL.Interfaces
 {
     public interface IAssessmentService
     {
-        Task<IEnumerable<AssessmentDto>> GetAssessmentsByStudentIdAsync(int studentId);
+        Task<AssessmentDto> GetAssessmentByIdAsync(int assessmentId, CancellationToken cancellationToken = default);
 
-        Task<IEnumerable<AssessmentDto>> GetAssessmentsByDateAsync(DateTime date);
+        Task<AssessmentDto> AddAssessmentAsync(AssessmentDto assessmentDto, CancellationToken cancellationToken = default);
 
-        Task<IEnumerable<AssessmentDto>> GetAssessmentsByDateRangeAsync(DateTime startDate, DateTime endDate);
+        Task<AssessmentDto> UpdateAssessmentAsync(int id, AssessmentDto assessmentDto, CancellationToken cancellationToken = default);
 
-        Task<AssessmentDto> GetAssessmentByIdAsync(int assessmentId);
+        Task DeleteAssessmentAsync(int assessmentId, CancellationToken cancellationToken = default);
 
-        Task<AssessmentDto> AddAssessmentAsync(AssessmentDto assessmentDto);
-
-        Task<AssessmentDto> UpdateAssessmentAsync(int id, AssessmentDto assessmentDto);
-
-        Task DeleteAssessmentAsync(int assessmentId);
-
-        Task<IEnumerable<AssessmentDto>> GetAllAssessmentsAsync();
+        Task<IEnumerable<AssessmentDto>> GetAllAssessmentsAsync(int? studentId = null, int? subjectId = null, DateTime? date = null, DateTime? startDate = null, DateTime? endDate = null, CancellationToken cancellationToken = default);
     }
 }

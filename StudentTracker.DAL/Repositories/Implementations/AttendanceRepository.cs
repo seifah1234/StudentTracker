@@ -39,25 +39,9 @@ namespace StudentTracker.DAL.Repositories.Implementations
 
         }
 
-        public async Task<IEnumerable<Attendance>> GetAllAttendancesAsync(AttendanceStatus? status = null, DateTime? startDate = null, DateTime? endDate = null, CancellationToken cancellationToken = default)
+        public async Task<IEnumerable<Attendance>> GetAllAttendancesAsync(CancellationToken cancellationToken = default)
         {
-            var attendances = _context.Attendances.AsQueryable();
-
-            if (status.HasValue)
-            {
-                attendances = attendances.Where(a => a.Status == status.Value);
-            }
-
-            if (startDate.HasValue)
-            {
-                attendances = attendances.Where(a => a.Date >= startDate.Value);
-            }
-
-            if (endDate.HasValue)
-            {
-                attendances = attendances.Where(a => a.Date <= endDate.Value);
-            }
-
+            var attendances = _context.Attendances.Include(a => a.Student).AsQueryable();
             return await Task.FromResult(attendances.ToList());
         }
 

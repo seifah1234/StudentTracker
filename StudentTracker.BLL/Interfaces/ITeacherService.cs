@@ -14,7 +14,7 @@ namespace StudentTracker.BLL.Interfaces
 
         Task<Teacher> CreateTeacher(Teacher teacher, CancellationToken cancellationToken = default);
 
-        Task<Teacher> UpdateTeacher(Teacher teacher, CancellationToken cancellationToken = default);
+        Task<Teacher> UpdateTeacher(int id, Teacher teacher, CancellationToken cancellationToken = default);
 
         Task<bool> DeleteTeacher(int id, CancellationToken cancellationToken = default);
 
