@@ -1,0 +1,30 @@
+@model ClassRoomViewModel
+
+
+<div class="mb-3">
+    <label asp-for="Name" class="form-label"></label>
+    <input asp-for="Name" class="form-control" />
+    <span asp-validation-for="Name" class="text-danger"></span>
+</div>
+<div class="mb-3">
+    <label asp-for="TeacherId" class="form-label"></label>
+    <select asp-for="TeacherId" class="form-select" asp-items="@(ViewData["Teachers"] as IEnumerable<SelectListItem>)">
+        <option value="">-- اختر المعلم --</option>
+    </select>
+    <span asp-validation-for="TeacherId" class="text-danger"></span>
+</div>
+<div class="mb-3">
+    <label asp-for="Semester" class="form-label"></label>
+    <select asp-for="Semester" class="form-select" asp-items="Html.GetEnumSelectList<Semester>()"></select>
+    <span asp-validation-for="Semester" class="text-danger"></span>
+</div>
+<div class="mb-3">
+    <label asp-for="AcademicYear" class="form-label"></label>
+    <input asp-for="AcademicYear" class="form-control" placeholder="مثال: 2026-2027" />
+    <span asp-validation-for="AcademicYear" class="text-danger"></span>
+</div>
+<div class="mb-3">
+    <label asp-for="ExpectedStudentCount" class="form-label"></label>
+    <input asp-for="ExpectedStudentCount" class="form-control" type="number" />
+    <span asp-validation-for="ExpectedStudentCount" class="text-danger"></span>
+</div>

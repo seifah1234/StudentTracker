@@ -1,0 +1,13 @@
+@model ClassRoomViewModel
+@{
+    ViewData["Title"] = "حذف فصل";
+}
+
+<h1 class="h3 mb-4 text-danger">تأكيد الحذف</h1>
+
+<div class="alert alert-warning">هل أنت متأكد من حذف الفصل "@Model.Name"؟ لا يمكن التراجع عن هذا الإجراء.</div>
+
+<form asp-action="Delete" asp-route-id="@Model.Id" method="post">
+    <button type="submit" class="btn btn-danger">تأكيد الحذف</button>
+    <a asp-action="Index" class="btn btn-outline-secondary">إلغاء</a>
+</form>

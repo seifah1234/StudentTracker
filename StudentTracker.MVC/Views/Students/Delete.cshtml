@@ -1,0 +1,20 @@
+@model StudentViewModel
+@{
+    ViewData["Title"] = "حذف طالب";
+}
+
+<h1 class="h3 mb-4 text-danger">بيانات الطالب</h1>
+
+<div class="alert alert-warning">
+    الـ API الحالي لا يوفر عملية حذف للطلاب (Delete endpoint غير موجود بعد في StudentsController)،
+    لذلك هذه الشاشة للعرض فقط.
+</div>
+
+<dl class="row">
+    <dt class="col-sm-3">الاسم</dt>
+    <dd class="col-sm-9">@Model.Name</dd>
+    <dt class="col-sm-3">الرقم القومي</dt>
+    <dd class="col-sm-9">@Model.NationalId</dd>
+</dl>
+
+<a asp-action="Index" class="btn btn-outline-secondary">العودة للقائمة</a>

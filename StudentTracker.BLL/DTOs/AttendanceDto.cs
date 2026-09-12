@@ -7,6 +7,7 @@ namespace StudentTracker.BLL.DTOs
 {
     public class AttendanceDto
     {
+        public int Id { get; set; }
         public DateTime? Date { get; set; }
 
         public string? StudentName { get; set; } = null;

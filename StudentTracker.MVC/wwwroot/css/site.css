@@ -1,0 +1,26 @@
+html {
+  font-size: 15px;
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+  margin-bottom: 60px;
+}
+
+.card {
+  border-radius: 0.75rem;
+}
+
+.table thead th {
+  white-space: nowrap;
+}
+
+.navbar-brand {
+  letter-spacing: 0.5px;
+}
+
+.badge-present { background-color: #198754; }
+.badge-absent { background-color: #dc3545; }
+.badge-late { background-color: #fd7e14; }

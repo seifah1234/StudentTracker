@@ -1,0 +1,25 @@
+@model ClassRoomViewModel
+@{
+    ViewData["Title"] = "عرض فصل";
+}
+
+<h1 class="h3 mb-4">بيانات الفصل</h1>
+
+<dl class="row">
+    <dt class="col-sm-3">اسم الفصل</dt>
+    <dd class="col-sm-9">@Model.Name</dd>
+    <dt class="col-sm-3">العام الدراسي</dt>
+    <dd class="col-sm-9">@Model.AcademicYear</dd>
+    <dt class="col-sm-3">الفصل الدراسي</dt>
+    <dd class="col-sm-9">@Model.Semester</dd>
+    <dt class="col-sm-3">عدد الطلاب المتوقع</dt>
+    <dd class="col-sm-9">@Model.ExpectedStudentCount</dd>
+    <dt class="col-sm-3">المدرّس المسؤول</dt>
+    <dd class="col-sm-9">
+        <a asp-controller="Teachers" asp-action="Details" asp-route-id="@Model.TeacherId">#@Model.TeacherId</a>
+    </dd>
+</dl>
+
+<a asp-action="Students" asp-route-id="@Model.Id" class="btn btn-outline-secondary">طلاب الفصل</a>
+<a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">تعديل</a>
+<a asp-action="Index" class="btn btn-outline-secondary">العودة للقائمة</a>

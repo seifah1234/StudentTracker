@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using StudentTracker.BLL.Interfaces;
+using StudentTracker.BLL.Mapping;
 using StudentTracker.BLL.Services;
 using StudentTracker.DAL.Data;
 using StudentTracker.DAL.Repositories.Implementations;
@@ -15,6 +16,9 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+// Mapper
+builder.Services.AddAutoMapper(a => a.AddProfile<MappingProfile>());
 
 builder.Services.AddScoped<IStudentRepository, StudentRepository>();
 builder.Services.AddScoped<IAssessmentRepository, AssessmentRepository>();

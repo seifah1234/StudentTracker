@@ -1,0 +1,24 @@
+@model AssessmentViewModel
+@{
+    ViewData["Title"] = "عرض تقييم";
+}
+
+<h1 class="h3 mb-4">بيانات التقييم</h1>
+
+<dl class="row">
+    <dt class="col-sm-3">اسم التقييم</dt>
+    <dd class="col-sm-9">@Model.Name</dd>
+    <dt class="col-sm-3">الطالب</dt>
+    <dd class="col-sm-9">@(Model.StudentName ?? $"#{Model.StudentId}")</dd>
+    <dt class="col-sm-3">المادة</dt>
+    <dd class="col-sm-9">@(Model.SubjectName ?? $"#{Model.SubjectId}")</dd>
+    <dt class="col-sm-3">الدرجة</dt>
+    <dd class="col-sm-9">@Model.ObtainedMarks / @Model.MaximumMarks</dd>
+    <dt class="col-sm-3">التاريخ</dt>
+    <dd class="col-sm-9">@Model.Date.ToString("yyyy-MM-dd")</dd>
+    <dt class="col-sm-3">ملاحظات</dt>
+    <dd class="col-sm-9">@(Model.Notes ?? "-")</dd>
+</dl>
+
+<a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">تعديل</a>
+<a asp-action="Index" class="btn btn-outline-secondary">العودة للقائمة</a>

@@ -1,0 +1,71 @@
+@{
+    ViewData["Title"] = "الرئيسية";
+}
+
+<div class="mb-4">
+    <h1 class="display-6">لوحة التحكم</h1>
+    <p class="text-muted">إدارة المدرّسين والفصول والطلاب والمواد والتقييمات والحضور من مكان واحد.</p>
+</div>
+
+<div class="row g-3">
+    <div class="col-md-4 col-lg-2">
+        <a class="text-decoration-none" asp-controller="Teachers" asp-action="Index">
+            <div class="card text-center shadow-sm h-100">
+                <div class="card-body">
+                    <h5 class="card-title">المدرّسون</h5>
+                    <p class="card-text text-muted small">إدارة بيانات المدرّسين</p>
+                </div>
+            </div>
+        </a>
+    </div>
+    <div class="col-md-4 col-lg-2">
+        <a class="text-decoration-none" asp-controller="ClassRooms" asp-action="Index">
+            <div class="card text-center shadow-sm h-100">
+                <div class="card-body">
+                    <h5 class="card-title">الفصول</h5>
+                    <p class="card-text text-muted small">إدارة الفصول الدراسية</p>
+                </div>
+            </div>
+        </a>
+    </div>
+    <div class="col-md-4 col-lg-2">
+        <a class="text-decoration-none" asp-controller="Students" asp-action="Index">
+            <div class="card text-center shadow-sm h-100">
+                <div class="card-body">
+                    <h5 class="card-title">الطلاب</h5>
+                    <p class="card-text text-muted small">إدارة بيانات الطلاب</p>
+                </div>
+            </div>
+        </a>
+    </div>
+    <div class="col-md-4 col-lg-2">
+        <a class="text-decoration-none" asp-controller="Subjects" asp-action="Index">
+            <div class="card text-center shadow-sm h-100">
+                <div class="card-body">
+                    <h5 class="card-title">المواد</h5>
+                    <p class="card-text text-muted small">إدارة المواد الدراسية</p>
+                </div>
+            </div>
+        </a>
+    </div>
+    <div class="col-md-4 col-lg-2">
+        <a class="text-decoration-none" asp-controller="Assessments" asp-action="Index">
+            <div class="card text-center shadow-sm h-100">
+                <div class="card-body">
+                    <h5 class="card-title">التقييمات</h5>
+                    <p class="card-text text-muted small">درجات الاختبارات والتقييمات</p>
+                </div>
+            </div>
+        </a>
+    </div>
+    <div class="col-md-4 col-lg-2">
+        <a class="text-decoration-none" asp-controller="Attendance" asp-action="Index">
+            <div class="card text-center shadow-sm h-100">
+                <div class="card-body">
+                    <h5 class="card-title">الحضور والغياب</h5>
+                    <p class="card-text text-muted small">تسجيل ومتابعة الحضور</p>
+                </div>
+            </div>
+        </a>
+    </div>
+</div>

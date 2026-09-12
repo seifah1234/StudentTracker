@@ -1,0 +1,49 @@
+@model List<StudentViewModel>
+@{
+    ViewData["Title"] = "الطلاب";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1 class="h3 mb-0">الطلاب</h1>
+    <a asp-action="Create" class="btn btn-primary">+ إضافة طالب</a>
+</div>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">لا يوجد طلاب بعد.</div>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table table-hover align-middle">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>الاسم</th>
+                    <th>الرقم القومي</th>
+                    <th>الفصل</th>
+                    <th>هاتف ولي الأمر</th>
+                    <th class="text-end">الإجراءات</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var s in Model)
+                {
+                    <tr>
+                        <td>@s.Id</td>
+                        <td>@s.Name</td>
+                        <td>@s.NationalId</td>
+                        <td>
+                            <a asp-controller="ClassRooms" asp-action="Details" asp-route-id="@s.ClassRoomId">#@s.ClassRoomName</a>
+                        </td>
+                        <td>@(s.ParentPhoneNumber ?? "-")</td>
+                        <td class="text-end">
+                            <a asp-action="Details" asp-route-id="@s.Id" class="btn btn-sm btn-outline-info">عرض</a>
+                            <a asp-action="Edit" asp-route-id="@s.Id" class="btn btn-sm btn-outline-primary">تعديل</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}

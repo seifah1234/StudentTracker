@@ -1,0 +1,39 @@
+@model StudentViewModel
+
+<div class="mb-3">
+    <label asp-for="Name" class="form-label"></label>
+    <input asp-for="Name" class="form-control" />
+    <span asp-validation-for="Name" class="text-danger"></span>
+</div>
+<div class="mb-3">
+    <label asp-for="ClassRoomId" class="form-label"></label>
+    <select asp-for="ClassRoomId" class="form-select" asp-items="@(ViewData["ClassRooms"] as IEnumerable<SelectListItem>)">
+        <option value="">-- اختر الفصل --</option>
+    </select>
+    <span asp-validation-for="ClassRoomId" class="text-danger"></span>
+</div>
+<div class="mb-3">
+    <label asp-for="NationalId" class="form-label"></label>
+    <input asp-for="NationalId" class="form-control" />
+    <span asp-validation-for="NationalId" class="text-danger"></span>
+</div>
+<div class="mb-3">
+    <label asp-for="BirthDate" class="form-label"></label>
+    <input asp-for="BirthDate" class="form-control" type="date" />
+    <span asp-validation-for="BirthDate" class="text-danger"></span>
+</div>
+<div class="mb-3">
+    <label asp-for="EnrollementDate" class="form-label"></label>
+    <input asp-for="EnrollementDate" class="form-control" type="date" />
+    <span asp-validation-for="EnrollementDate" class="text-danger"></span>
+</div>
+<div class="mb-3">
+    <label asp-for="ParentPhoneNumber" class="form-label"></label>
+    <input asp-for="ParentPhoneNumber" class="form-control" />
+    <span asp-validation-for="ParentPhoneNumber" class="text-danger"></span>
+</div>
+<div class="mb-3">
+    <label asp-for="PersonalPhotoUrl" class="form-label"></label>
+    <input asp-for="PersonalPhotoUrl" class="form-control" placeholder="https://..." />
+    <span asp-validation-for="PersonalPhotoUrl" class="text-danger"></span>
+</div>

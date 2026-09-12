@@ -33,7 +33,7 @@ namespace StudentTracker.DAL.Repositories.Implementations
 
         public async Task<IEnumerable<Student>> GetAllStudents(CancellationToken cancellationToken = default)
         {
-            return await _context.Students.ToListAsync(cancellationToken);
+            return await _context.Students.Include(s => s.ClassRoom).ToListAsync(cancellationToken);
         }
 
         public async Task<Student?> GetStudent(int id, CancellationToken cancellationToken = default)

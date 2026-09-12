@@ -3,4 +3,5 @@
   <Project Path="StudentTracker.DAL/StudentTracker.DAL.csproj" />
   <Project Path="StudentTracker.Shared/StudentTracker.Shared.csproj" />
   <Project Path="StudentTracker/StudentTracker.PL.csproj" />
+  <Project Path="StudentTracker.MVC/StudentTracker.MVC.csproj" />
 </Solution>

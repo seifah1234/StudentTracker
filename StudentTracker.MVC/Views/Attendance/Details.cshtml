@@ -1,0 +1,20 @@
+@model AttendanceViewModel
+@{
+    ViewData["Title"] = "عرض سجل حضور";
+}
+
+<h1 class="h3 mb-4">بيانات سجل الحضور</h1>
+
+<dl class="row">
+    <dt class="col-sm-3">الطالب</dt>
+    <dd class="col-sm-9">@(Model.StudentName ?? $"#{Model.StudentId}")</dd>
+    <dt class="col-sm-3">التاريخ</dt>
+    <dd class="col-sm-9">@Model.Date.ToString("yyyy-MM-dd")</dd>
+    <dt class="col-sm-3">الحالة</dt>
+    <dd class="col-sm-9">@(Model.Status ?? Model.AttendanceStatus.ToString())</dd>
+    <dt class="col-sm-3">ملاحظات</dt>
+    <dd class="col-sm-9">@(Model.Notes ?? "-")</dd>
+</dl>
+
+<a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">تعديل</a>
+<a asp-action="Index" class="btn btn-outline-secondary">العودة للقائمة</a>

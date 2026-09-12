@@ -1,0 +1,48 @@
+@model List<TeacherViewModel>
+@{
+    ViewData["Title"] = "المدرّسون";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1 class="h3 mb-0">المدرّسون</h1>
+    <a asp-action="Create" class="btn btn-primary">+ إضافة مدرّس</a>
+</div>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">لا يوجد مدرّسون بعد.</div>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table table-hover align-middle">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>الاسم</th>
+                    <th>البريد الإلكتروني</th>
+                    <th>رقم الهاتف</th>
+                    <th class="text-end">الإجراءات</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var teacher in Model)
+                {
+                    <tr>
+                        <td>@teacher.Id</td>
+                        <td>@teacher.Name</td>
+                        <td>@teacher.Email</td>
+                        <td>@(teacher.PhoneNumber ?? "-")</td>
+                        <td class="text-end">
+                            <a asp-action="ClassRooms" asp-route-id="@teacher.Id" class="btn btn-sm btn-outline-secondary">الفصول</a>
+                            <a asp-action="Students" asp-route-id="@teacher.Id" class="btn btn-sm btn-outline-secondary">الطلاب</a>
+                            <a asp-action="Details" asp-route-id="@teacher.Id" class="btn btn-sm btn-outline-info">عرض</a>
+                            <a asp-action="Edit" asp-route-id="@teacher.Id" class="btn btn-sm btn-outline-primary">تعديل</a>
+                            <a asp-action="Delete" asp-route-id="@teacher.Id" class="btn btn-sm btn-outline-danger">حذف</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}

@@ -1,0 +1,49 @@
+@model List<ClassRoomViewModel>
+@{
+    ViewData["Title"] = "الفصول";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1 class="h3 mb-0">الفصول الدراسية</h1>
+    <a asp-action="Create" class="btn btn-primary">+ إضافة فصل</a>
+</div>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">لا توجد فصول بعد.</div>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table table-hover align-middle">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>اسم الفصل</th>
+                    <th>العام الدراسي</th>
+                    <th>الفصل الدراسي</th>
+                    <th>عدد الطلاب المتوقع</th>
+                    <th class="text-end">الإجراءات</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var c in Model)
+                {
+                    <tr>
+                        <td>@c.Id</td>
+                        <td>@c.Name</td>
+                        <td>@c.AcademicYear</td>
+                        <td>@c.Semester</td>
+                        <td>@c.ExpectedStudentCount</td>
+                        <td class="text-end">
+                            <a asp-action="Students" asp-route-id="@c.Id" class="btn btn-sm btn-outline-secondary">الطلاب</a>
+                            <a asp-action="Details" asp-route-id="@c.Id" class="btn btn-sm btn-outline-info">عرض</a>
+                            <a asp-action="Edit" asp-route-id="@c.Id" class="btn btn-sm btn-outline-primary">تعديل</a>
+                            <a asp-action="Delete" asp-route-id="@c.Id" class="btn btn-sm btn-outline-danger">حذف</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}

@@ -9,6 +9,7 @@ namespace StudentTracker.BLL.Mapping
         public MappingProfile()
         {
             CreateMap<DAL.Entities.Subject, DTOs.SubjectDto>().ReverseMap();
+
         }
     }
 }

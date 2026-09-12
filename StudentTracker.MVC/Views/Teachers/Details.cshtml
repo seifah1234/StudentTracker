@@ -1,0 +1,22 @@
+@model TeacherViewModel
+@{
+    ViewData["Title"] = "عرض مدرّس";
+}
+
+<h1 class="h3 mb-4">بيانات المدرّس</h1>
+
+<dl class="row">
+    <dt class="col-sm-3">الاسم</dt>
+    <dd class="col-sm-9">@Model.Name</dd>
+
+    <dt class="col-sm-3">البريد الإلكتروني</dt>
+    <dd class="col-sm-9">@Model.Email</dd>
+
+    <dt class="col-sm-3">رقم الهاتف</dt>
+    <dd class="col-sm-9">@(Model.PhoneNumber ?? "-")</dd>
+</dl>
+
+<a asp-action="ClassRooms" asp-route-id="@Model.Id" class="btn btn-outline-secondary">فصول المدرّس</a>
+<a asp-action="Students" asp-route-id="@Model.Id" class="btn btn-outline-secondary">طلاب المدرّس</a>
+<a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">تعديل</a>
+<a asp-action="Index" class="btn btn-outline-secondary">العودة للقائمة</a>

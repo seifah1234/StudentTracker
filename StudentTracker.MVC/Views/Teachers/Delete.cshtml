@@ -1,0 +1,20 @@
+@model TeacherViewModel
+@{
+    ViewData["Title"] = "حذف مدرّس";
+}
+
+<h1 class="h3 mb-4 text-danger">تأكيد الحذف</h1>
+
+<div class="alert alert-warning">هل أنت متأكد من حذف المدرّس التالي؟ لا يمكن التراجع عن هذا الإجراء.</div>
+
+<dl class="row">
+    <dt class="col-sm-3">الاسم</dt>
+    <dd class="col-sm-9">@Model.Name</dd>
+    <dt class="col-sm-3">البريد الإلكتروني</dt>
+    <dd class="col-sm-9">@Model.Email</dd>
+</dl>
+
+<form asp-action="Delete" asp-route-id="@Model.Id" method="post">
+    <button type="submit" class="btn btn-danger">تأكيد الحذف</button>
+    <a asp-action="Index" class="btn btn-outline-secondary">إلغاء</a>
+</form>

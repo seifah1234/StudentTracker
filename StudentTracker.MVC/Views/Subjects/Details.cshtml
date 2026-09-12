@@ -1,0 +1,20 @@
+@model SubjectViewModel
+@{
+    ViewData["Title"] = "عرض مادة";
+}
+
+<h1 class="h3 mb-4">بيانات المادة</h1>
+
+<dl class="row">
+    <dt class="col-sm-3">الكود</dt>
+    <dd class="col-sm-9">@Model.Code</dd>
+    <dt class="col-sm-3">اسم المادة</dt>
+    <dd class="col-sm-9">@Model.Name</dd>
+    <dt class="col-sm-3">الدرجة النهائية</dt>
+    <dd class="col-sm-9">@Model.MaximumMarks</dd>
+    <dt class="col-sm-3">الوصف</dt>
+    <dd class="col-sm-9">@(Model.Description ?? "-")</dd>
+</dl>
+
+<a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">تعديل</a>
+<a asp-action="Index" class="btn btn-outline-secondary">العودة للقائمة</a>
